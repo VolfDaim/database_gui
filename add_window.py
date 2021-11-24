@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox as mb
+from PIL import ImageTk
 
 
 class Add(tk.Toplevel):
@@ -19,45 +20,50 @@ class Add(tk.Toplevel):
         self.title('Добавить информацию о материале')
         self.resizable(False, False)
 
-        self.name = tk.Entry(self, width=30)
-        self.typeof = tk.Entry(self, width=30)
-        self.author = tk.Entry(self, width=30)
-        self.discipline = tk.Entry(self, width=30)
-        self.year = tk.Entry(self, width=30)
-        self.places = tk.Entry(self, width=30)
+        self.name = self.create_entry()
+        self.typeof = self.create_entry()
+        self.author = self.create_entry()
+        self.discipline = self.create_entry()
+        self.year = self.create_entry()
+        self.places = self.create_entry()
 
-        name_hint = tk.Label(self, text='Наименование', width=30)
-        typeof_hint = tk.Label(self, text='Вид работы', width=30)
-        author_hint = tk.Label(self, text='Автор', width=30)
-        discipline_hint = tk.Label(self, text='Дисциплина', width=30)
-        year_hint = tk.Label(self, text='Год', width=30)
-        place_hint = tk.Label(self, text='Место хранения', width=30)
+        name_hint = self.create_label('Наименование')
+        typeof_hint = self.create_label('Вид работы')
+        author_hint = self.create_label('Автор')
+        discipline_hint = self.create_label('Дисциплина')
+        year_hint = self.create_label('Год')
+        place_hint = self.create_label('Место хранения')
 
-        self.name.place(x=10, y=20)
-        self.typeof.place(x=10, y=50)
-        self.author.place(x=10, y=80)
-        self.discipline.place(x=10, y=110)
-        self.year.place(x=10, y=140)
-        self.places.place(x=10, y=170)
+        self.image_save = tk.PhotoImage(file='icons/save.png')
+        self.image_back = tk.PhotoImage(file='icons/back.png')
+        self.button_save = tk.Button(self, image=self.image_save, bg='#ffffff', bd=0)
 
-        name_hint.place(x=300, y=20)
-        typeof_hint.place(x=300, y=50)
-        author_hint.place(x=300, y=80)
-        discipline_hint.place(x=300, y=110)
-        year_hint.place(x=300, y=140)
-        place_hint.place(x=300, y=170)
-
-        self.button_save = tk.Button(self, text='Сохранить', bg='#ffff33', width=40)
         self.button_save.bind('<Button-1>', lambda add: self.insert_table(self.name.get(),
                                                                           self.typeof.get(),
                                                                           self.author.get(),
                                                                           self.discipline.get(),
                                                                           self.year.get(),
                                                                           self.places.get()))
-        self.button_save.pack(side=tk.BOTTOM)
 
-        self.button_back = tk.Button(self, text='Назад', bg='#ffff33', width=40, command=self.close)
-        self.button_back.pack(side=tk.BOTTOM)
+        self.button_back = tk.Button(self, image=self.image_back, text='Назад', bg='#ffffff', bd=0,
+                                     command=self.close)
+
+        self.name.grid(row=0, column=0, sticky='W', pady=10, padx=20)
+        self.typeof.grid(row=1, column=0, sticky='W', pady=10, padx=20)
+        self.author.grid(row=2, column=0, sticky='W', pady=10, padx=20)
+        self.discipline.grid(row=3, column=0, sticky='W', pady=10, padx=20)
+        self.year.grid(row=4, column=0, sticky='W', pady=10, padx=20)
+        self.places.grid(row=5, column=0, sticky='W', pady=10, padx=20)
+
+        name_hint.grid(row=0, column=1)
+        typeof_hint.grid(row=1, column=1)
+        author_hint.grid(row=2, column=1)
+        discipline_hint.grid(row=3, column=1)
+        year_hint.grid(row=4, column=1)
+        place_hint.grid(row=5, column=1)
+
+        self.button_back.grid(row=7, column=1, sticky='W', pady=200, padx=50)
+        self.button_save.grid(row=7, column=0, sticky='W', pady=200, padx=100)
 
         self.grab_set()
         self.focus_set()
@@ -71,6 +77,12 @@ class Add(tk.Toplevel):
             self.db.insert(*args)
             self.db.view_table()
             self.destroy()
+
+    def create_entry(self):
+        return tk.Entry(self, width=30, bg='#F4EA7C')
+
+    def create_label(self, text):
+        return tk.Label(self, text=text, width=30, bg='#BFE5E8')
 
     def close(self):
         self.destroy()

@@ -8,7 +8,7 @@ if __name__ == '__main__':
     root = tk.Tk()
     db = DB()
     app = Main(root, db)
-    app.pack()
+    #app.pack()
     root.title("Database university")
     w = root.winfo_screenwidth()
     h = root.winfo_screenheight()
