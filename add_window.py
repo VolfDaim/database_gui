@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox as mb
-from PIL import ImageTk
 
 
 class Add(tk.Toplevel):

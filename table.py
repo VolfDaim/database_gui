@@ -38,14 +38,24 @@ class Table(tk.Toplevel):
         ])
         self.combobox_search.current(0)
 
+        self.image_search = tk.PhotoImage(file='icons/search.png')
+        self.image_back = tk.PhotoImage(file='icons/small_back.png')
+        self.image_delete = tk.PhotoImage(file='icons/delete.png')
+        self.image_delete_all = tk.PhotoImage(file='icons/delete_all.png')
+
         self.enter_search = ttk.Entry(self)
-        button_search = ttk.Button(self, text='Поиск', command=self.view_search)
-        button_cancel = ttk.Button(self, text='Назад', command=self.destroy)
-        button_delete_by = ttk.Button(self, text='Удалить', command=self.delete_by)
-        button_delete_all = ttk.Button(self, text='Очистить базу данных', command=self.delete_all)
+        button_search = tk.Button(self, image=self.image_search, bg='#ffffff', bd=0, command=self.view_search)
+        button_cancel = tk.Button(self, image=self.image_back, bg='#ffffff', bd=0, command=self.destroy)
+        button_delete_by = tk.Button(self, image=self.image_delete, bg='#ffffff', bd=0, command=self.delete_by)
+        button_delete_all = tk.Button(self, image=self.image_delete_all, bg='#ffffff', bd=0, command=self.delete_all)
+
+        label_search = tk.Label(self, text='Поиск', width=10, bg='#ffffff')
+        label_cancel = tk.Label(self, text='Назад', width=10, bg='#ffffff')
+        label_delete_by = tk.Label(self, text='Удалить', width=10, bg='#ffffff')
+        label_delete_all = tk.Label(self, text='Очистить базу данных', width=20, bg='#ffffff')
 
         self.tree = ttk.Treeview(self, columns=('id', 'name', 'typeof', 'author', 'discipline', 'year', 'place'),
-                                 height=15, show='headings')
+                                 height=20, show='headings')
 
         self.tree.column('id', width=30, anchor=tk.CENTER)
         self.tree.column('name', width=150, anchor=tk.CENTER)
@@ -65,11 +75,18 @@ class Table(tk.Toplevel):
 
         self.combobox_search.grid(row=0, column=0, sticky='W')
         self.enter_search.grid(row=0, column=1, sticky='W')
-        button_search.grid(row=0, column=2, sticky='W')
-        button_cancel.grid(row=0, column=3, sticky='W')
-        button_delete_by.grid(row=0, column=4, sticky='W')
-        button_delete_all.grid(row=0, column=5, sticky='W')
-        self.tree.grid(row=1, column=0, columnspan=6)
+
+        button_search.grid(row=0, column=2)
+        button_cancel.grid(row=0, column=3)
+        button_delete_by.grid(row=0, column=4)
+        button_delete_all.grid(row=0, column=5)
+
+        label_search.grid(row=1, column=2, sticky='W')
+        label_cancel.grid(row=1, column=3, sticky='W')
+        label_delete_by.grid(row=1, column=4, sticky='W')
+        label_delete_all.grid(row=1, column=5, sticky='W')
+
+        self.tree.grid(row=2, column=0, columnspan=6)
 
     def view_table(self):
         self.db.view_table()
