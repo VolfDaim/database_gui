@@ -73,7 +73,7 @@ class Table(tk.Toplevel):
         self.tree.heading('year', text='year')
         self.tree.heading('place', text='place')
 
-        self.combobox_search.grid(row=0, column=0, sticky='W')
+        self.combobox_search.grid(row=0, column=0, sticky='W',padx=10)
         self.enter_search.grid(row=0, column=1, sticky='W')
 
         button_search.grid(row=0, column=2)
@@ -86,7 +86,7 @@ class Table(tk.Toplevel):
         label_delete_by.grid(row=1, column=4, sticky='W')
         label_delete_all.grid(row=1, column=5, sticky='W')
 
-        self.tree.grid(row=2, column=0, columnspan=6)
+        self.tree.grid(row=2, column=0, columnspan=6, padx=10)
 
     def view_table(self):
         self.db.view_table()
