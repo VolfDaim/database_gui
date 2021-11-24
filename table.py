@@ -1,17 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox as mb
 
 
 class Table(tk.Toplevel):
     def __init__(self, root, db):
         super().__init__(root)
-
         self.db = db
-
-        self.config(bg='#000000')
-        self.title('Просмотреть информацию о материалах')
-        self.resizable(False, False)
-
         self.grab_set()
         self.focus_set()
 
@@ -19,6 +14,36 @@ class Table(tk.Toplevel):
         self.view_table()
 
     def init_interface(self):
+        self.config(bg='#ffffff')
+        self.title('Просмотреть информацию о материалах')
+        self.resizable(False, False)
+
+        self.search_dict = {
+            'Наименование': 'name',
+            'Вид работы': 'typeof',
+            'Автор': 'author',
+            'Дисциплина': 'discipline',
+            'Год': 'year',
+            'Место хранения': 'place'
+        }
+
+        self.combobox_search = ttk.Combobox(self, values=[
+            'Наименование',
+            'Вид работы',
+            'Автор',
+            'Дисциплина',
+            'Год',
+            'Место хранения'
+
+        ])
+        self.combobox_search.current(0)
+
+        self.enter_search = ttk.Entry(self)
+        button_search = ttk.Button(self, text='Поиск', command=self.view_search)
+        button_cancel = ttk.Button(self, text='Назад', command=self.destroy)
+        button_delete_by = ttk.Button(self, text='Удалить', command=self.delete_by)
+        button_delete_all = ttk.Button(self, text='Очистить базу данных', command=self.delete_all)
+
         self.tree = ttk.Treeview(self, columns=('id', 'name', 'typeof', 'author', 'discipline', 'year', 'place'),
                                  height=15, show='headings')
 
@@ -38,36 +63,49 @@ class Table(tk.Toplevel):
         self.tree.heading('year', text='year')
         self.tree.heading('place', text='place')
 
-        self.tree.pack()
+        self.combobox_search.grid(row=0, column=0, sticky='W')
+        self.enter_search.grid(row=0, column=1, sticky='W')
+        button_search.grid(row=0, column=2, sticky='W')
+        button_cancel.grid(row=0, column=3, sticky='W')
+        button_delete_by.grid(row=0, column=4, sticky='W')
+        button_delete_all.grid(row=0, column=5, sticky='W')
+        self.tree.grid(row=1, column=0, columnspan=6)
 
     def view_table(self):
         self.db.view_table()
+        self.show_table()
+
+    def view_search(self):
+        self.db.search_by(self.search_dict[self.combobox_search.get()], self.enter_search.get())
+        fetch = self.db.c.fetchall()
+
+        if not fetch:
+            mb.showinfo('Поиск', 'Данные не найдены')
+        else:
+            self.show_table()
+
+    def delete_by(self):
+
+        self.db.search_by(self.search_dict[self.combobox_search.get()], self.enter_search.get())
+        fetch = self.db.c.fetchall()
+
+        if not fetch:
+            mb.showinfo('Удаление', 'Данные для удаления не найдены')
+        else:
+            answer = mb.askyesno(message='Вы уверены, что хотите удалить эти данные?')
+            if answer:
+                self.db.delete_by(self.search_dict[self.combobox_search.get()], self.enter_search.get())
+                self.db.view_table()
+                self.show_table()
+
+    def delete_all(self):
+        answer = mb.askyesno(message='Вы уверены, что хотите очистить базу данных?')
+
+        if answer:
+            self.db.delete_all()
+            mb.showinfo(message='База данных очищена')
+            self.show_table()
+
+    def show_table(self):
         [self.tree.delete(item) for item in self.tree.get_children()]
         [self.tree.insert('', 'end', values=row) for row in self.db.c.fetchall()]
-
-    class Search(tk.Toplevel):
-        def __init__(self):
-            super().__init__()
-            self.init_interface()
-
-        def init_interface(self):
-            w = self.root.winfo_screenwidth()
-            h = self.root.winfo_screenheight()
-            w //= 2
-            h //= 2
-            self.geometry(f"300x150+{w - 300 // 2}+{h - 150 // 2}")
-            self.config(bg='#000000')
-            self.title('Просмотреть информацию о материалах')
-            self.resizable(False, False)
-
-            search = tk.Label(self, text='Поиск')
-            search.place(x=50, y=30)
-
-            self.enter_search = ttk.Entry(self)
-            self.enter_search.place(x=150, y=30, width=120)
-
-            button_cancel = ttk.Button(self, text='Назад', command=self.destroy())
-            button_cancel.place(x=125, y=50, width=50)
-
-            self.grab_set()
-            self.focus_set()

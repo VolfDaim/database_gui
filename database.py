@@ -1,6 +1,7 @@
 import sqlite3 as sl
 import tkinter as tk
 
+
 class DB:
     def __init__(self):
         self.connection = sl.Connection('university.db')
@@ -19,4 +20,16 @@ class DB:
 
     def view_table(self):
         self.c.execute('SELECT * FROM university')
+        self.connection.commit()
 
+    def search_by(self, parameter, value):
+        self.c.execute(f'SELECT * FROM university WHERE {parameter} = (?)', (value,))
+        self.connection.commit()
+
+    def delete_by(self,parameter,value):
+        self.c.execute(f'DELETE FROM university WHERE {parameter} = (?)', (value, ))
+        self.connection.commit()
+
+    def delete_all(self):
+        self.c.execute('DELETE FROM university')
+        self.connection.commit()

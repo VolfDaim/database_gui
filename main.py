@@ -15,6 +15,6 @@ if __name__ == '__main__':
     w //= 2
     h //= 2
     root.geometry(f"550x650+{w - 550 // 2}+{h - 650 // 2}")
-    root.config(bg='#000000')
+    root.config(bg='#ffffff')
     root.resizable(False, False)
     root.mainloop()

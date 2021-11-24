@@ -1,11 +1,12 @@
 import tkinter as tk
+from tkinter import messagebox as mb
 
 
 class Add(tk.Toplevel):
     def __init__(self, root, db):
         super().__init__(root)
         self.db = db
-        self.root=root
+        self.root = root
         self.init_interface()
 
     def init_interface(self):
@@ -14,7 +15,7 @@ class Add(tk.Toplevel):
         w //= 2
         h //= 2
         self.geometry(f"550x650+{w - 550 // 2}+{h - 650 // 2}")
-        self.config(bg='#000000')
+        self.config(bg='#ffffff')
         self.title('Добавить информацию о материале')
         self.resizable(False, False)
 
@@ -61,10 +62,15 @@ class Add(tk.Toplevel):
         self.grab_set()
         self.focus_set()
 
-    def insert_table(self, name, typeof, author, discipline, year, place):
-        self.db.insert(name, typeof, author, discipline, year, place)
-        self.db.view_table()
-        self.destroy()
+    def insert_table(self, *args):
+        for item in args:
+            if not item:
+                mb.showinfo(message='Вы не заполнили все поля')
+                break
+        else:
+            self.db.insert(*args)
+            self.db.view_table()
+            self.destroy()
 
     def close(self):
         self.destroy()

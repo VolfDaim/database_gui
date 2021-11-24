@@ -15,6 +15,7 @@ class Main(tk.Frame):
                                pady='8').pack()
         button_check = tk.Button(text="Просмотреть информацию", bg='#ffff33', width=40, pady='8',
                                  command=self.call_table).pack()
+
         button_exit = tk.Button(text="Выход", bg='#ffff33', width=40, pady='8', command=self.exit).pack()
 
     def call_save(self):
