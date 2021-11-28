@@ -36,7 +36,7 @@ class Main(tk.Frame):
         Add(self.root, self.db)
 
     def call_table(self):
-        Table(self.root, self.db)
+        Table(self.root, self.db)   
 
     def exit(self):
         self.root.destroy()

@@ -99,7 +99,8 @@ class Table(tk.Toplevel):
         if not fetch:
             mb.showinfo('Поиск', 'Данные не найдены')
         else:
-            self.show_table()
+            [self.tree.delete(item) for item in self.tree.get_children()]
+            [self.tree.insert('', 'end', values=row) for row in fetch]
 
     def delete_by(self):
 
